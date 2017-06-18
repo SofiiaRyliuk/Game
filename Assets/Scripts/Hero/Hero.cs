@@ -7,7 +7,7 @@ public class Hero : MonoBehaviour
     //public parameters which can be changed 
     public float speed = 1;
 
-    public bool isGrounded = false; // jump
+    public bool isGrounded = true; // jump
     public float MaxJumpTime = 2f;
     public float JumpSpeed = 2f;
 
@@ -20,6 +20,8 @@ public class Hero : MonoBehaviour
     bool JumpActive = false; //jump
     float JumpTime = 0f;
 
+    public static Hero lastHero = null;
+
     void Start()
     {
         myBody = GetComponent<Rigidbody2D>();
@@ -27,7 +29,7 @@ public class Hero : MonoBehaviour
 
     void Awake()
     {
-
+        lastHero = this;
     }
 
     void FixedUpdate()
@@ -70,15 +72,15 @@ public class Hero : MonoBehaviour
         Vector3 to = transform.position + Vector3.down * 0.1f;
         int layer_id = 1 << LayerMask.NameToLayer("Ground");
 
-        RaycastHit2D hit = Physics2D.Linecast(from, to, layer_id);
+        RaycastHit2D hit = Physics2D.Linecast(from, to, layer_id); //check !!!!!
         if (hit)
         {
             isGrounded = true;
         }
-        else
+     /*   else
         {
             isGrounded = false;
-        }
+        }*/
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -93,7 +95,7 @@ public class Hero : MonoBehaviour
                 if (this.JumpTime < this.MaxJumpTime)
                 {
                     Vector2 vel = myBody.velocity;
-                    vel.y = JumpSpeed * (1.0f - JumpTime / MaxJumpTime) + 0.7f;
+                    vel.y = JumpSpeed * (1.0f - JumpTime / MaxJumpTime) + 1f;
                     myBody.velocity = vel;
                 }
             }
