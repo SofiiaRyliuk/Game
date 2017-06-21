@@ -18,14 +18,13 @@ public class Enemy : MonoBehaviour
     Vector3 pointB;
     float dir = 1; //get direction
     bool toB = true;
-    bool attack = false;
-
 
     void Start()
     {
         myBody = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();
+        
+        pointA = transform.position;
+        pointB = pointA + moveBy;
     }
 
     void FixedUpdate()
@@ -38,11 +37,13 @@ public class Enemy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-
+        attackHero();
     }
 
     void move()
     {
+        sr = GetComponent<SpriteRenderer>();
+
         float value = getDirection();
 
         if (Mathf.Abs(value) > 0)
@@ -65,7 +66,8 @@ public class Enemy : MonoBehaviour
     float getDirection()
     {
         Vector3 my = transform.position;
-        if (attack)
+
+        if (isAttack())
         {
             if (my.x < Hero.lastHero.transform.position.x)
             {
@@ -73,6 +75,7 @@ public class Enemy : MonoBehaviour
             }
             else return -1;
         }
+
         else
         {
 
@@ -103,6 +106,19 @@ public class Enemy : MonoBehaviour
         pos.z = 0;
         target.z = 0;
         return Vector3.Distance(pos, target) <= 0.2f;
+    }
+
+    bool isAttack()
+    {
+        if (Hero.lastHero.transform.position.x > Mathf.Min(pointA.x, pointB.x)
+            && Hero.lastHero.transform.position.x < Mathf.Max(pointA.x, pointB.x))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
 }

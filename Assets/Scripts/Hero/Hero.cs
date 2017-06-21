@@ -77,10 +77,10 @@ public class Hero : MonoBehaviour
         {
             isGrounded = true;
         }
-     /*   else
-        {
-            isGrounded = false;
-        }*/
+        /*   else
+           {
+               isGrounded = false;
+           }*/
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -119,5 +119,18 @@ public class Hero : MonoBehaviour
 
     }
 
+    void OnTriggerStay2D(Collider2D coll)
+    {
+        if (coll.gameObject.tag == "Ladder") //move up by ladder
+        {
+            float value = Input.GetAxis("Vertical");
 
+            if (Mathf.Abs(value) > 0)
+            {
+                Vector2 vel = myBody.velocity;
+                vel.y = value * speed;
+                myBody.velocity = vel;
+            }
+        }
+    }
 }
